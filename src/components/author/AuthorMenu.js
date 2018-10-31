@@ -4,7 +4,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
-class SimpleMenu extends React.Component {
+class AuthorMenu extends React.Component {
   state = {
     anchorEl: null
   };
@@ -27,8 +27,6 @@ class SimpleMenu extends React.Component {
 
   handleClose = event => {
     this.setState({ anchorEl: null });
-    console.log('event.currentTarget', event.currentTarget);
-    console.log('event.target', event.target.id);
   };
 
   render() {
@@ -36,20 +34,12 @@ class SimpleMenu extends React.Component {
 
     return (
       <div>
-        <Button
-          aria-owns={anchorEl ? 'simple-menu' : undefined}
-          aria-haspopup="true"
-          onClick={this.handleClick}
-        >
+        <Button aria-owns={anchorEl ? 'simple-menu' : undefined} aria-haspopup="true" onClick={this.handleClick}>
           <MoreVertIcon />
         </Button>
-        <Menu
-          id="simple-menu"
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={this.handleClose}
-        >
+        <Menu id="simple-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={this.handleClose}>
           <MenuItem onClick={this.handleEdit}>Edit</MenuItem>
+          <MenuItem onClick={this.handleTranslate}>Translate</MenuItem>
           <MenuItem onClick={this.handleDelete}>Delete</MenuItem>
         </Menu>
       </div>
@@ -57,4 +47,4 @@ class SimpleMenu extends React.Component {
   }
 }
 
-export default SimpleMenu;
+export default AuthorMenu;

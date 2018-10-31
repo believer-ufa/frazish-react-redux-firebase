@@ -14,6 +14,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Typography from '@material-ui/core/Typography';
 
 const fabStyle = {
   margin: 0,
@@ -57,9 +58,8 @@ class AuthorForm extends React.Component {
         <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
           <DialogTitle id="form-dialog-title">Add a new Author</DialogTitle>
           <DialogContent>
-            <DialogContentText>
-              Please, don't add duplicates. Be sure that added Author not exist yet on our site.
-            </DialogContentText>
+            <DialogContentText>Please, don't create duplicates. Be sure that it's not exist yet.</DialogContentText>
+            <br />
             <Grid container>
               <Grid item sm={6}>
                 <TextField onChange={this.handleChange} autoFocus id="name" label="Name" type="text" />
@@ -68,7 +68,8 @@ class AuthorForm extends React.Component {
                 <TextField onChange={this.handleChange} id="image" label="Image" type="text" />
               </Grid>
               <Grid item sm={12}>
-                Preview:
+                <br />
+                <Typography variant="subtitle1">Preview:</Typography>
                 <List>
                   <ListItem divider>
                     <Avatar alt={this.state.name} src={this.state.image} />
