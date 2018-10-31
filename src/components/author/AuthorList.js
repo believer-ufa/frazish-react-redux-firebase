@@ -3,23 +3,12 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import Checkbox from '@material-ui/core/Checkbox';
 import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
 import Menu from './AuthorMenu';
-import AddIcon from '@material-ui/icons/Add';
 import { Grid } from '@material-ui/core';
+import AuthorForm from './AuthorForm';
 
 import { connect } from 'react-redux';
-
-const style = {
-  margin: 0,
-  top: 'auto',
-  right: 20,
-  bottom: 20,
-  left: 'auto',
-  position: 'fixed'
-};
 
 export class AuthorList extends Component {
   handleEdit = e => {
@@ -52,9 +41,7 @@ export class AuthorList extends Component {
             {' '}
           </Grid> */}
         </Grid>
-        <Button style={style} variant="fab" color="primary" aria-label="Add">
-          <AddIcon />
-        </Button>
+        <AuthorForm />
       </main>
     );
   }
