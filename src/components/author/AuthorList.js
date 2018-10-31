@@ -7,37 +7,10 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Menu from './AuthorMenu';
-
 import AddIcon from '@material-ui/icons/Add';
 import { Grid } from '@material-ui/core';
 
-const authors = [
-  {
-    id: '111',
-    name: 'F.M.Dostoevsky',
-    image: 'https://i.warosu.org/data/lit/img/0103/79/1512891765207.jpg'
-  },
-  {
-    id: '222',
-    name: 'L.N.Tolstoy',
-    image: 'https://i.warosu.org/data/lit/img/0103/79/1512891765207.jpg'
-  },
-  {
-    id: '333',
-    name: 'J.R.R.Tolkien',
-    image: 'https://i.warosu.org/data/lit/img/0103/79/1512891765207.jpg'
-  },
-  {
-    id: '4',
-    name: 'W.Shakespear',
-    image: 'https://i.warosu.org/data/lit/img/0103/79/1512891765207.jpg'
-  },
-  {
-    id: '5',
-    name: 'Ch.Dickens',
-    image: 'https://i.warosu.org/data/lit/img/0103/79/1512891765207.jpg'
-  }
-];
+import { connect } from 'react-redux';
 
 const style = {
   margin: 0,
@@ -64,7 +37,7 @@ export class AuthorList extends Component {
           </Grid> */}
           <Grid item xs={12} sm={12} md={6} lg={4}>
             <List>
-              {authors.map((author, index) => (
+              {this.props.authors.map((author, index) => (
                 <ListItem divider key={author.id}>
                   <Avatar alt={author.name} src={author.image} />
                   <ListItemText primary={author.name} />
@@ -87,4 +60,9 @@ export class AuthorList extends Component {
   }
 }
 
-export default AuthorList;
+const mapStateToProps = state => {
+  return {
+    authors: state.author.authors
+  };
+};
+export default connect(mapStateToProps)(AuthorList);
