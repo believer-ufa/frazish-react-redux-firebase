@@ -15,6 +15,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Typography from '@material-ui/core/Typography';
+import { connect } from 'react-redux';
+import { addAuthor } from '../../store/actions/addAuthor';
 
 const fabStyle = {
   margin: 0,
@@ -43,10 +45,13 @@ class AuthorForm extends React.Component {
       [e.target.id]: e.target.value
     });
   };
-
-  handleClose = () => {
+  handleSubmit = () => {
+    const { name, image } = this.state;
+    this.props.addAuthor({ name, image });
     this.setState(initialState);
-    console.log('state', this.state);
+  };
+  handleCancel = () => {
+    this.setState(initialState);
   };
 
   render() {
@@ -83,10 +88,10 @@ class AuthorForm extends React.Component {
             </Grid>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
+            <Button onClick={this.handleCancel} color="primary">
               Cancel
             </Button>
-            <Button onClick={this.handleClose} color="primary">
+            <Button onClick={this.handleSubmit} color="primary">
               Save
             </Button>
           </DialogActions>
@@ -96,4 +101,13 @@ class AuthorForm extends React.Component {
   }
 }
 
-export default AuthorForm;
+const mapDispatchToProps = dispatch => {
+  return {
+    addAuthor: author => dispatch(addAuthor(author))
+  };
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(AuthorForm);

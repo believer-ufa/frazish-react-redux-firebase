@@ -29,6 +29,15 @@ const initState = {
 };
 
 const authorReducer = (state = initState, action) => {
+  switch (action.type) {
+    case 'ADD_AUTHOR':
+      console.log('added author', action.author);
+      //console.log('state', state.authors);
+      const authors = [...state.authors, { id: '0000', ...action.author }];
+      return { ...state, authors };
+    default:
+      console.log('some action happended');
+  }
   return state;
 };
 
