@@ -3,6 +3,8 @@ import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { connect } from 'react-redux';
+import toggleModal from '../../store/actions/toggleModal';
 
 class AuthorMenu extends React.Component {
   state = {
@@ -15,8 +17,9 @@ class AuthorMenu extends React.Component {
 
   handleEdit = event => {
     const { handleEdit, id } = this.props;
-    handleEdit(id);
+    //handleEdit(id);
     this.setState({ anchorEl: null });
+    this.props.toggleModal();
   };
 
   handleDelete = event => {
@@ -47,4 +50,13 @@ class AuthorMenu extends React.Component {
   }
 }
 
-export default AuthorMenu;
+const mapDispatchToProps = dispatch => {
+  return {
+    toggleModal: () => dispatch(toggleModal())
+  };
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(AuthorMenu);

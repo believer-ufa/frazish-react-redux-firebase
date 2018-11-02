@@ -1,4 +1,4 @@
-export const addAuthor = author => {
+const addAuthor = author => {
   //some async call to db
   return (dispatch, getState) => {
     dispatch({
@@ -7,3 +7,5 @@ export const addAuthor = author => {
     });
   };
 };
+
+export default addAuthor;

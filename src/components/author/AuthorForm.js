@@ -6,7 +6,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import AddIcon from '@material-ui/icons/Add';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -16,29 +15,11 @@ import Avatar from '@material-ui/core/Avatar';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux';
-import { addAuthor } from '../../store/actions/addAuthor';
-
-const fabStyle = {
-  margin: 0,
-  top: 'auto',
-  right: 20,
-  bottom: 20,
-  left: 'auto',
-  position: 'fixed'
-};
-
-const initialState = {
-  open: false,
-  name: 'Shakespear W.',
-  image: 'https://i.warosu.org/data/lit/img/0103/79/1512891765207.jpg'
-};
+import addAuthor from '../../store/actions/addAuthor';
+import toggleModal from '../../store/actions/toggleModal';
 
 class AuthorForm extends React.Component {
-  state = initialState;
-
-  handleClickOpen = () => {
-    this.setState({ open: true });
-  };
+  state = { name: '', image: '' };
 
   handleChange = e => {
     this.setState({
@@ -48,19 +29,22 @@ class AuthorForm extends React.Component {
   handleSubmit = () => {
     const { name, image } = this.state;
     this.props.addAuthor({ name, image });
-    this.setState(initialState);
+    this.props.toggleModal();
+    //this.setState({ ...initialState });
   };
   handleCancel = () => {
-    this.setState(initialState);
+    //this.setState(initialState);
+    this.props.toggleModal();
   };
 
   render() {
+    const previewImage = this.state.image
+      ? this.state.image
+      : 'https://i.warosu.org/data/lit/img/0103/79/1512891765207.jpg';
+    const previewName = this.state.name ? this.state.name : 'Shakespear W.';
     return (
       <div>
-        <Button style={fabStyle} onClick={this.handleClickOpen} variant="fab" color="primary" aria-label="Add">
-          <AddIcon />
-        </Button>
-        <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
+        <Dialog open={this.props.openModal} onClose={this.handleClose} aria-labelledby="form-dialog-title">
           <DialogTitle id="form-dialog-title">Add a new Author</DialogTitle>
           <DialogContent>
             <DialogContentText>Please, don't create duplicates. Be sure that it's not exist yet.</DialogContentText>
@@ -72,13 +56,13 @@ class AuthorForm extends React.Component {
               <Grid item sm={6}>
                 <TextField onChange={this.handleChange} id="image" label="Image" type="text" />
               </Grid>
-              <Grid item sm={12}>
+              <Grid item xs={12}>
                 <br />
                 <Typography variant="subtitle1">Preview:</Typography>
                 <List>
                   <ListItem divider>
-                    <Avatar alt={this.state.name} src={this.state.image} />
-                    <ListItemText primary={this.state.name} />
+                    <Avatar alt={previewName} src={previewImage} />
+                    <ListItemText primary={previewName} />
                     <ListItemSecondaryAction>
                       <MoreVertIcon />
                     </ListItemSecondaryAction>
@@ -101,13 +85,20 @@ class AuthorForm extends React.Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    openModal: state.option.openModal
+  };
+};
+
 const mapDispatchToProps = dispatch => {
   return {
-    addAuthor: author => dispatch(addAuthor(author))
+    addAuthor: author => dispatch(addAuthor(author)),
+    toggleModal: () => dispatch(toggleModal())
   };
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(AuthorForm);
