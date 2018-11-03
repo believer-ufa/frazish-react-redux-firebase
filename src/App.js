@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import Navbar from "./components/layout/Navbar";
-import MainPage from "./components/mainPage/MainPage";
-import AuthorList from "./components/author/AuthorList";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import React, { Component } from 'react';
+import Navbar from './components/layout/Navbar';
+import MainPage from './components/mainPage/MainPage';
+import AuthorListPage from './components/author/ListPage';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 class App extends Component {
   render() {
@@ -12,7 +12,7 @@ class App extends Component {
           <Navbar />
           <Switch>
             <Route exact path="/" component={MainPage} />
-            <Route path="/authors" component={AuthorList} />
+            <Route path="/authors" component={AuthorListPage} />
           </Switch>
         </div>
       </BrowserRouter>

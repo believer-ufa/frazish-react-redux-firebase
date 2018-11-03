@@ -1,12 +1,9 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import { Menu, MenuItem } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { connect } from 'react-redux';
-import toggleModal from '../../store/actions/toggleModal';
 
-class AuthorMenu extends React.Component {
+class ItemMenu extends React.Component {
   state = {
     anchorEl: null
   };
@@ -18,13 +15,15 @@ class AuthorMenu extends React.Component {
   handleEdit = event => {
     const { handleEdit, id } = this.props;
     //handleEdit(id);
+    //const { id, name, image } = this.props.author;
+
     this.setState({ anchorEl: null });
-    this.props.toggleModal();
+    this.props.toggleModal(this.props.author);
   };
 
   handleDelete = event => {
-    const { handleDelete, id } = this.props;
-    handleDelete(id);
+    const { id, name, image } = this.props.author;
+    console.log('delete', id);
     this.setState({ anchorEl: null });
   };
 
@@ -50,7 +49,9 @@ class AuthorMenu extends React.Component {
   }
 }
 
-const mapDispatchToProps = dispatch => {
+export default ItemMenu;
+
+/* const mapDispatchToProps = dispatch => {
   return {
     toggleModal: () => dispatch(toggleModal())
   };
@@ -59,4 +60,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   null,
   mapDispatchToProps
-)(AuthorMenu);
+)(AuthorMenu); */

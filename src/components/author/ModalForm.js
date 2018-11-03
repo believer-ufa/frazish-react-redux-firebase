@@ -1,40 +1,46 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Grid from '@material-ui/core/Grid';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import Typography from '@material-ui/core/Typography';
+
+import {
+  Button,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Grid,
+  Typography
+} from '@material-ui/core';
 import { connect } from 'react-redux';
 import addAuthor from '../../store/actions/addAuthor';
-import toggleModal from '../../store/actions/toggleModal';
+import AuthorListItem from './ListItem';
+
+const initialState = { name: '', image: '' };
 
 class AuthorForm extends React.Component {
-  state = { name: '', image: '' };
+  /*  componentDidMount = () => {
+    const defaultState = this.props.data ? this.props.data : initialState;
+    this.setState(defaultState);
+    console.log('this.setState(defaultState)', this.state);
+  }; */
+  state = this.props.data ? this.props.data : initialState;
 
   handleChange = e => {
     this.setState({
       [e.target.id]: e.target.value
     });
   };
+
   handleSubmit = () => {
     const { name, image } = this.state;
     this.props.addAuthor({ name, image });
     this.props.toggleModal();
-    //this.setState({ ...initialState });
+    this.setState(initialState);
   };
+
   handleCancel = () => {
-    //this.setState(initialState);
     this.props.toggleModal();
+    this.setState(initialState);
   };
 
   render() {
@@ -42,6 +48,9 @@ class AuthorForm extends React.Component {
       ? this.state.image
       : 'https://i.warosu.org/data/lit/img/0103/79/1512891765207.jpg';
     const previewName = this.state.name ? this.state.name : 'Shakespear W.';
+    const { name, image } = this.props.data ? this.props.data : { name: '', image: '' };
+    console.log('this.props.data', this.props.data);
+    console.log(this.state);
     return (
       <div>
         <Dialog open={this.props.openModal} onClose={this.handleClose} aria-labelledby="form-dialog-title">
@@ -51,23 +60,22 @@ class AuthorForm extends React.Component {
             <br />
             <Grid container>
               <Grid item sm={6}>
-                <TextField onChange={this.handleChange} autoFocus id="name" label="Name" type="text" />
+                <TextField
+                  onChange={this.handleChange}
+                  autoFocus
+                  id="name"
+                  label="Name"
+                  type="text"
+                  defaultValue={name}
+                />
               </Grid>
               <Grid item sm={6}>
-                <TextField onChange={this.handleChange} id="image" label="Image" type="text" />
+                <TextField onChange={this.handleChange} id="image" label="Image" type="text" defaultValue={image} />
               </Grid>
               <Grid item xs={12}>
                 <br />
                 <Typography variant="subtitle1">Preview:</Typography>
-                <List>
-                  <ListItem divider>
-                    <Avatar alt={previewName} src={previewImage} />
-                    <ListItemText primary={previewName} />
-                    <ListItemSecondaryAction>
-                      <MoreVertIcon />
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                </List>
+                <AuthorListItem author={{ name: previewName, image: previewImage }} />
               </Grid>
             </Grid>
           </DialogContent>
@@ -85,20 +93,13 @@ class AuthorForm extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    openModal: state.option.openModal
-  };
-};
-
 const mapDispatchToProps = dispatch => {
   return {
-    addAuthor: author => dispatch(addAuthor(author)),
-    toggleModal: () => dispatch(toggleModal())
+    addAuthor: author => dispatch(addAuthor(author))
   };
 };
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(AuthorForm);
