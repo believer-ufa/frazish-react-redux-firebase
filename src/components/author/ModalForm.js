@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { compose } from 'recompose';
 
 import {
   Button,
@@ -17,43 +19,73 @@ import AuthorListItem from './ListItem';
 
 const initialState = { name: '', image: '' };
 
-class AuthorForm extends React.Component {
-  /*  componentDidMount = () => {
-    const defaultState = this.props.data ? this.props.data : initialState;
-    this.setState(defaultState);
-    console.log('this.setState(defaultState)', this.state);
-  }; */
-  state = this.props.data ? this.props.data : initialState;
+// Здесь можно подключить какие-то дополнительные hoc'и к
+// компоненту, внутри функции compose
+const hoc = compose(
+  // мы вызывем connect без всяких параметров, чтобы упростить код,
+  // и чтобы получить ф-ю dispatch в наш компонент и далее использовать
+  // её для выполнения action'ов
+  connect(),
+);
+
+class AuthorFormClass extends React.Component {
+  static propTypes = {
+    dispatch: PropTypes.func.isRequired,
+    forwardedRef: PropTypes.func,
+  };
+
+  static defaultProps = {
+    forwardedRef: undefined,
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      opened: false,
+      data: initialState,
+    };
+
+    if (this.props.forwardedRef) {
+      this.props.forwardedRef(this);
+    }
+  }
+
+  open = (data = initialState) => {
+    this.setState({
+      opened: true,
+      data,
+    });
+  };
+
+  close = () => {
+    this.setState({
+      opened: false,
+      data: initialState,
+    });
+  };
 
   handleChange = e => {
     this.setState({
-      [e.target.id]: e.target.value
+      data: {
+        ...this.state.data,
+        [e.target.id]: e.target.value,
+      }
     });
   };
 
   handleSubmit = () => {
-    const { name, image } = this.state;
-    this.props.addAuthor({ name, image });
-    this.props.toggleModal();
-    this.setState(initialState);
-  };
-
-  handleCancel = () => {
-    this.props.toggleModal();
-    this.setState(initialState);
+    const { dispatch } = this.props;
+    const { name, image } = this.state.data;
+    dispatch(addAuthor({ name, image }));
+    this.close();
   };
 
   render() {
-    const previewImage = this.state.image
-      ? this.state.image
-      : 'https://i.warosu.org/data/lit/img/0103/79/1512891765207.jpg';
-    const previewName = this.state.name ? this.state.name : 'Shakespear W.';
-    const { name, image } = this.props.data ? this.props.data : { name: '', image: '' };
-    console.log('this.props.data', this.props.data);
-    console.log(this.state);
+    const { name, image } = this.state.data;
     return (
       <div>
-        <Dialog open={this.props.openModal} onClose={this.handleClose} aria-labelledby="form-dialog-title">
+        <Dialog open={this.state.opened} onClose={this.close} aria-labelledby="form-dialog-title">
           <DialogTitle id="form-dialog-title">Add a new Author</DialogTitle>
           <DialogContent>
             <DialogContentText>Please, don't create duplicates. Be sure that it's not exist yet.</DialogContentText>
@@ -75,12 +107,12 @@ class AuthorForm extends React.Component {
               <Grid item xs={12}>
                 <br />
                 <Typography variant="subtitle1">Preview:</Typography>
-                <AuthorListItem author={{ name: previewName, image: previewImage }} />
+                <AuthorListItem author={{ name, image }} />
               </Grid>
             </Grid>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleCancel} color="primary">
+            <Button onClick={this.close} color="primary">
               Cancel
             </Button>
             <Button onClick={this.handleSubmit} color="primary">
@@ -93,13 +125,13 @@ class AuthorForm extends React.Component {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    addAuthor: author => dispatch(addAuthor(author))
-  };
-};
+const AuthorForm = hoc(AuthorFormClass);
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(AuthorForm);
+// Мы оборачиваем наш компонент другими hoc'ами, это создаёт проблему.
+// Чтобы родительские компоненты могли легко добраться до
+// кода и методов основного класса, мы возвращаем компонент с помощью спец.
+// ф-ии React.forwardRef, которая появилась совсем недавно.
+// Подробнее: https://reactjs.org/docs/forwarding-refs.html
+export default React.forwardRef((props, ref) => (
+  <AuthorForm {...props} forwardedRef={ref} />
+));

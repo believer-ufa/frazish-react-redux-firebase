@@ -8,12 +8,16 @@ import AuthorList from './List';
 import { connect } from 'react-redux';
 
 export class AuthorListPage extends Component {
-  state = { openModal: false, modalData: null };
 
-  toggleModal = data => {
-    const modalData = data ? data : { name: '', image: '' };
-    console.log('this.state.modalData', this.state.modalData);
-    this.setState({ openModal: !this.state.openModal, modalData });
+  openModal = data => {
+    // Так как у нас есть доступ к методам компонента формы, мы
+    // можем вызывать их и передавать в них какие-то данные.
+    // А дальше компонент уже разберётся, что с ними делать :)
+    this.authorForm.open(data);
+  };
+
+  authorFormRef = (el) => {
+    this.authorForm = el;
   };
 
   render() {
@@ -22,14 +26,14 @@ export class AuthorListPage extends Component {
         <Grid container>
           {/*<Grid item xs={0} sm={3} md={4}>{' '}</Grid> */}
           <Grid item xs={12} sm={12} md={6} lg={4}>
-            <AuthorList authors={this.props.authors} toggleModal={this.toggleModal} />
-            <Button style={fabStyle} onClick={this.toggleModal} variant="fab" color="primary" aria-label="Add">
+            <AuthorList authors={this.props.authors} openModal={this.openModal} />
+            <Button style={fabStyle} onClick={this.openModal} variant="fab" color="primary" aria-label="Add">
               <AddIcon />
             </Button>
           </Grid>
           {/*<Grid item xs={0} sm={3} md={4}>{' '}</Grid> */}
         </Grid>
-        <AuthorForm openModal={this.state.openModal} toggleModal={this.toggleModal} data={this.state.modalData} />
+        <AuthorForm ref={this.authorFormRef} />
       </main>
     );
   }

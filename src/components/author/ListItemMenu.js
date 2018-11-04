@@ -18,7 +18,7 @@ class ItemMenu extends React.Component {
     //const { id, name, image } = this.props.author;
 
     this.setState({ anchorEl: null });
-    this.props.toggleModal(this.props.author);
+    this.props.openModal(this.props.author);
   };
 
   handleDelete = event => {
@@ -50,14 +50,3 @@ class ItemMenu extends React.Component {
 }
 
 export default ItemMenu;
-
-/* const mapDispatchToProps = dispatch => {
-  return {
-    toggleModal: () => dispatch(toggleModal())
-  };
-};
-
-export default connect(
-  null,
-  mapDispatchToProps
-)(AuthorMenu); */

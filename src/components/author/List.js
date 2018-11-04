@@ -7,7 +7,7 @@ const AuthorList = props => {
     <Fragment>
       <List>
         {props.authors.map((author, index) => (
-          <AuthorListItem author={author} key={author.id} toggleModal={props.toggleModal} />
+          <AuthorListItem author={author} key={author.id} openModal={props.openModal} />
         ))}
       </List>
     </Fragment>

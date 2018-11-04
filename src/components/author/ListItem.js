@@ -10,7 +10,7 @@ const AuthorListItem = props => {
         <Avatar alt={author.name} src={author.image} />
         <ListItemText primary={author.name} />
         <ListItemSecondaryAction>
-          <ItemMenu author={author} toggleModal={props.toggleModal} />
+          <ItemMenu author={author} openModal={props.openModal} />
         </ListItemSecondaryAction>
       </ListItem>
     </Fragment>
